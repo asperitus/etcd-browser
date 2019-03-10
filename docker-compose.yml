@@ -1,0 +1,32 @@
+version: '3.6'
+
+services:
+  etcd-browser:
+    build:
+      context: ./ 
+      dockerfile: Dockerfile
+    image: asperitus/etcd-browser:latest
+    # ports:
+    #   - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      # - AUTH_USER=
+      # - AUTH_PASS=
+      - ETCD_HOST=host.docker.internal
+      - ETCD_PORT=2379
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend.loadbalancer.stickiness=true"
+      - "traefik.backend=etcd-ui"
+      - "traefik.docker.network=web"
+      - "traefik.entrypoints=http"
+      - "traefik.frontend.passHostHeader=true"
+      - "traefik.frontend.rule=Host:etcd-ui.local.m3,etcd-browser.local.m3"
+      - "traefik.port=8080"
+  
+networks:
+  web:
+    external: false
+    name: web

@@ -11,6 +11,6 @@ RUN mkdir /app
 ADD . /app/
 
 WORKDIR /app
-EXPOSE 8000
+EXPOSE 8080
 
 CMD ["nodejs", "server.js"]
